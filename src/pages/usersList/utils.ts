@@ -18,12 +18,6 @@ const formatData = (data: any): TableData[] => {
 
 const PAGINATION_RANGE = 13;
 
-const layoutStyles = {
-  width: "100%",
-  display: "flex",
-  "flex-direction": "column",
-};
-
 export { PAGINATION_RANGE, formatData, DATA_TYPES };
 
 export type { TableData };

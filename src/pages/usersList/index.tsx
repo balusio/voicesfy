@@ -1,7 +1,7 @@
-import React, { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import { Button, Input, Space, Table, Layout } from "antd";
+import React, { useCallback, useEffect, useState } from "react";
+import { Button, Input, Table } from "antd";
 import type { TableProps } from "antd";
-import { current } from "@reduxjs/toolkit";
+
 import { SearchOutlined } from "@ant-design/icons";
 import { DATA_TYPES, PAGINATION_RANGE, TableData, formatData } from "./utils";
 
@@ -15,6 +15,11 @@ function UsersList() {
   const [data, setData] = useState<TableData[]>([]);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState<TableData[]>(data);
+  const [pagination, setPagination] = useState({
+    total: 1,
+    current: 1,
+    skip: 0,
+  });
 
   const handleSearch = (value: string, prop: keyof TableData) => {
     setSearchText(value);
@@ -98,12 +103,6 @@ function UsersList() {
     setSearchText("");
   };
 
-  const [pagination, setPagination] = useState({
-    total: 1,
-    current: 1,
-    skip: 0,
-  });
-
   const onPaginationChange = (pageNumber: number) => {
     getData(PAGINATION_RANGE, PAGINATION_RANGE * (pageNumber - 1));
 
@@ -122,9 +121,8 @@ function UsersList() {
     const formattedData = formatData(data.users);
 
     setData(formattedData);
-
-    // on change pagination you must check data formatted
     setFilteredData(formattedData);
+
     setPagination((prevValue) => ({
       ...prevValue,
       total: data.total,
