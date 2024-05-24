@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { QueryKey, UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useGetBrandId } from "hooks";
+import useAuthQuery from "./useAuthQuery";
 
 export function useBrandIdSubscribedQuery<T>(
   handler: (brandId: string) => Promise<T | undefined>,
@@ -8,7 +9,7 @@ export function useBrandIdSubscribedQuery<T>(
 ): UseQueryResult<T | undefined> {
   const brandId = useGetBrandId();
 
-  const query = useQuery({
+  const query = useAuthQuery({
     queryFn: async (): Promise<T | undefined> => {
       if (!brandId) return undefined;
       const response = await handler(brandId);
@@ -23,5 +24,5 @@ export function useBrandIdSubscribedQuery<T>(
     }
   }, [brandId]);
 
-  return query;
+  return query as UseQueryResult<T | undefined>;
 }

@@ -19,39 +19,39 @@ export function AuthenticationProvider({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const handleValidation = async () => {
-      setIsLoading(true);
-      const session = await LoginService.getCurrentToken();
+  // useEffect(() => {
+  //   const handleValidation = async () => {
+  //     setIsLoading(true);
+  //     const session = await LoginService.getCurrentToken();
 
-      if (session) {
-        let token = session;
-        if (LoginService.isTokenExpired(token)) {
-          try {
-            const refreshedToken = await LoginService.refreshToken();
-            if (refreshedToken) {
-              token = refreshedToken;
-            }
-          } catch (e) {
-            console.error(e);
-            LoginService.logout();
-          }
-        }
+  //     if (session) {
+  //       let token = session;
+  //       if (LoginService.isTokenExpired(token)) {
+  //         try {
+  //           const refreshedToken = await LoginService.refreshToken();
+  //           if (refreshedToken) {
+  //             token = refreshedToken;
+  //           }
+  //         } catch (e) {
+  //           console.error(e);
+  //           LoginService.logout();
+  //         }
+  //       }
 
-        dispatch(
-          updateAuth({
-            accessToken: token.access,
-            refreshToken: token.refresh,
-          })
-        );
-      } else {
-        dispatch(updateAuth({ accessToken: null, refreshToken: null }));
-      }
-      setIsLoading(false);
-    };
+  //       dispatch(
+  //         updateAuth({
+  //           accessToken: token.access,
+  //           refreshToken: token.refresh,
+  //         })
+  //       );
+  //     } else {
+  //       dispatch(updateAuth({ accessToken: null, refreshToken: null }));
+  //     }
+  //     setIsLoading(false);
+  //   };
 
-    handleValidation();
-  }, []);
+  //   handleValidation();
+  // }, []);
 
   if (isLoading) {
     return (
