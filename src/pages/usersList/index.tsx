@@ -3,38 +3,16 @@ import { Button, Input, Space, Table, Layout } from "antd";
 import type { TableProps } from "antd";
 import { current } from "@reduxjs/toolkit";
 import { SearchOutlined } from "@ant-design/icons";
+import { DATA_TYPES, PAGINATION_RANGE, TableData, formatData } from "./utils";
 
 const layoutStyles = {
   width: "100%",
   display: "flex",
   "flex-direction": "column",
 };
-enum DATA_TYPES {
-  fullName = "fullName",
-  firstName = "firstName",
-  lastName = "lastName",
-  email = "email",
-  id = "id",
-  image = "image",
-}
-// id,image,firstName,lastName,email
-interface ImageComponentProps {
-  url: string;
-}
-type TableData = Record<DATA_TYPES, string>;
-
-const formatData = (data: any): TableData[] => {
-  return data.map((element: any) => ({
-    ...element,
-    fullName: `${element.firstName} ${element.lastName}`,
-  }));
-};
-
-const PAGINATION_RANGE = 13;
 
 function UsersList() {
   const [data, setData] = useState<TableData[]>([]);
-  const [sortedInfo, setSortedInfo] = useState<TableData[]>([]);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState<TableData[]>(data);
 
@@ -116,7 +94,6 @@ function UsersList() {
   ];
 
   const resetFilters = () => {
-    setSortedInfo([]);
     setFilteredData(data);
     setSearchText("");
   };
@@ -145,11 +122,13 @@ function UsersList() {
     const formattedData = formatData(data.users);
 
     setData(formattedData);
+
+    // on change pagination you must check data formatted
+    setFilteredData(formattedData);
     setPagination((prevValue) => ({
       ...prevValue,
       total: data.total,
     }));
-    setFilteredData(formattedData);
   }, []);
 
   useEffect(() => {
