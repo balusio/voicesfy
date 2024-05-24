@@ -77,7 +77,11 @@ In a production environment, with a proper JWT generating API, and a proper JWT 
 
 Provide an answer below:
 
-> DELETE THIS QUOTE AND REPLACE IT WITH YOUR ANSWER
+> You can end into a race condition and can lead into a refresh token loop, expiring the token and refreshing leading to self invoking, this also depends on how differently you handle expire and refresh enpoint, example:
+
+- Assuming you have an edpoint that refresh the token just by checking if its already stored and creates a new one, you will end up into a series of invalid tokens leading to a redirect log out or data handling corruption due to authentication.
+  > Another problem might be computing compsuption (DB access ,memory consumptions) leading into unnecesary increase of pricing even if you properly handle the token validation and avoid duplication
+  > Multiple sessions at the same time, opening multiple doors for the user auth, leading into vulnerabilites if those token aren't properly handled.
 
 ---
 
