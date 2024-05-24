@@ -1,4 +1,8 @@
-import { DashboardOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  DashboardOutlined,
+  UserOutlined,
+  BorderlessTableOutlined,
+} from "@ant-design/icons";
 import { Layout, Menu, Avatar, theme, Row, Col, Image } from "antd";
 import { AppPath } from "components";
 import { useAppNavigate } from "hooks";
@@ -30,11 +34,19 @@ export function AppSidebar({ collapsed, setCollapsed }: AppSidebarProps) {
     },
   ];
 
+  const userDefaultItems: MenuItemType[] = [
+    {
+      key: AppPath.users,
+      label: "Users",
+      icon: <UserOutlined />,
+    },
+  ];
+
   const bottomDefaultItems: MenuItemType[] = [
     {
       key: AppPath.brandProfile,
       label: "Brand",
-      icon: <UserOutlined />,
+      icon: <BorderlessTableOutlined />,
     },
   ];
 
@@ -42,6 +54,7 @@ export function AppSidebar({ collapsed, setCollapsed }: AppSidebarProps) {
     ...topDefaultItems,
     ...sidebarItems,
     ...bottomDefaultItems,
+    ...userDefaultItems,
   ];
 
   return (
