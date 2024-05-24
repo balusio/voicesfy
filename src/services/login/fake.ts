@@ -29,4 +29,12 @@ export class LoginFakeService extends FakeService<LoginResponseData> {
   public async getValidToken(): Promise<LoginResponseData> {
     return accessTokenResult;
   }
+
+  public isTokenExpired(token: LoginResponseData): boolean {
+    return false;
+  }
+
+  public async refreshToken(): Promise<LoginResponseData> {
+    return accessTokenResult;
+  }
 }

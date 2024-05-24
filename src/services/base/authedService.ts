@@ -1,5 +1,6 @@
 import { LoginApiService } from "services/login/api";
 import { ApiService } from "./apiService";
+import { access } from "fs";
 
 const loginService = new LoginApiService();
 
@@ -9,6 +10,10 @@ export class AuthedService extends ApiService {
   public async injectJWTIntoHeader(header: Record<string, string> = {}) {
     try {
       const token = await loginService.getValidToken();
+
+      if (!token) {
+        throw new Error("invalid token");
+      }
       return {
         ...header,
         Authorization: `Bearer ${token?.access}`,

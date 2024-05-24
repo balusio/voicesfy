@@ -21,6 +21,32 @@ export class LoginApiService extends LoginService {
     return this.retrieveFromLocalStorage();
   }
 
+  public isTokenExpired(token: LoginResponseData): boolean {
+    const parsedToken = this.parseJwt(token?.access);
+
+    if (new Date().getTime() / 1000 > parsedToken.exp) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public async refreshToken(): Promise<LoginResponseData | null> {
+    const token = await this.getCurrentToken();
+    try {
+      const response: LoginResponseData = await this.fetchPost(
+        "/refresh/",
+        { method: "POST" },
+        { refresh: (token as LoginResponseData).refresh }
+      );
+      return response;
+    } catch (e) {
+      console.log(e);
+      this.logout();
+      return null;
+    }
+  }
+
   public async getValidToken(): Promise<LoginResponseData | null> {
     const token = await this.getCurrentToken();
     if (!token || !token.access) {
@@ -28,23 +54,23 @@ export class LoginApiService extends LoginService {
       return null;
     }
 
-    try {
-      const parsedToken = this.parseJwt(token?.access);
+    return token;
+    // try {
+    //   // const parsedToken = this.parseJwt(token?.access);
 
-      if (new Date().getTime() / 1000 > parsedToken.exp) {
-        const response: LoginResponseData = await this.fetchPost(
-          "/refresh/",
-          { method: "POST" },
-          { refresh: token.refresh }
-        );
-        this.storeInLocalStorage(response);
-      }
-      return this.retrieveFromLocalStorage();
-    } catch (e) {
-      console.log(e);
-      this.logout();
-    }
-    return null;
+    //   // if (new Date().getTime() / 1000 > parsedToken.exp) {
+    //   //   const response: LoginResponseData = await this.fetchPost(
+    //   //     "/refresh/",
+    //   //     { method: "POST" },
+    //   //     { refresh: token.refresh }
+    //   //   );
+    //   //   this.storeInLocalStorage(response);
+    //   // }
+    //   return this.retrieveFromLocalStorage();
+    // } catch (e) {
+    //   console.log(e);
+    //   this.logout();
+    // }
   }
 
   private loginDataKey = "loginData";

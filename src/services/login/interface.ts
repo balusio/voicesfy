@@ -15,4 +15,6 @@ export abstract class LoginService extends ApiService {
   abstract logout(): void;
   abstract getCurrentToken(): Promise<LoginResponseData | null>;
   abstract getValidToken(): Promise<LoginResponseData | null>;
+  abstract isTokenExpired(token: LoginResponseData): boolean;
+  abstract refreshToken(): Promise<LoginResponseData | null>;
 }
